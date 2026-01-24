@@ -6,6 +6,55 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an 8-week LLM Engineering course repository from Ed Donner's Udemy course. The course teaches students to build AI applications using LLMs, culminating in an autonomous multi-agent AI system in Week 8. The repository contains Jupyter notebooks organized by week, each with daily labs that students execute while learning.
 
+## Code Minimalism Principles
+
+**CRITICAL: All code in this repository follows strict minimalism principles. More code is NOT better.**
+
+### Core Principle
+Simple, explainable, readable, and MINIMAL code. Never sacrifice simplicity for brevity (no code golf/minification).
+
+### Specific Rules
+
+1. **Docstrings**: Single-line summary only. No Args/Returns/Raises/Examples unless truly complex.
+   - ❌ Bad: 55-line docstring with examples
+   - ✅ Good: `"""Generate synthetic data from schema."""`
+
+2. **Comments**: Code should be self-documenting. Only comment non-obvious "why", never "what".
+   - ❌ Bad: `# Loop through records` (obvious)
+   - ✅ Good: `# Skip validation for trusted internal callers` (explains decision)
+   - ❌ Delete: "FIX:", "TODO:", "HACK:" comments in production code
+
+3. **Validation**: Extract repeated validation to helpers. Never duplicate validation blocks.
+   - ❌ Bad: Same 12-line validation in 3 methods (36 lines)
+   - ✅ Good: One `_validate_data()` helper (12 lines)
+
+4. **Logging**: ERROR/WARNING only. No INFO for routine operations.
+   - ❌ Bad: `logger.info("Service initialized")`
+   - ✅ Good: `logger.error("Failed to export", exc_info=True)`
+
+5. **Prompts**: Concise. No repetition. 2-3 directives, not 5+ bullet points.
+
+6. **Abstractions**: Only when they reduce total code. Avoid layers that add complexity.
+
+7. **Error Messages**: One sentence max. Clear and actionable.
+   - ❌ Bad: Multi-line explanation
+   - ✅ Good: `"Schema must be non-empty dict"`
+
+### Before Adding Code, Ask
+1. Can existing code be simplified instead?
+2. Does this add clarity or just documentation?
+3. Would deleting code make it clearer?
+
+## synth-data-v2 Project (community-contributions/shabsi4u/)
+
+**CRITICAL: Uses `uv` package manager, NOT pip.**
+
+Commands:
+- Run app: `uv run streamlit run synth_data/ui/app.py`
+- Run tests: `uv run pytest`
+- Install deps: `uv sync`
+- Run Python scripts: `uv run python script.py`
+
 ## Repository Structure
 
 - `week1/` through `week8/`: Weekly course modules, each containing daily notebooks (`day1.ipynb`, `day2.ipynb`, etc.)
@@ -187,6 +236,14 @@ deepseek = OpenAI(api_key=key, base_url="https://api.deepseek.com")
 ## Git Workflow
 
 **IMPORTANT: This repository has custom git configuration. See `.cursor/rules` for complete details.**
+
+### Commit Message Format
+
+**Keep commits concise (1-2 lines max):**
+- ❌ No "Co-Authored-By" lines
+- ❌ No multi-paragraph explanations
+- ✅ Format: `type: brief description`
+- ✅ Example: `refactor: reduce verbosity by 291 lines`
 
 ### Multi-Account GitHub Setup (Critical!)
 This user has multiple GitHub accounts configured via SSH aliases:
